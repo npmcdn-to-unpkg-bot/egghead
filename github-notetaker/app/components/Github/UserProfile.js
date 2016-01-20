@@ -1,7 +1,7 @@
 var React = require('react');
 
-var UserProfiles = React.createClass({
-    render: function() {
+var UserProfile = React.createClass({
+    render: function(){
         return (
             <div>
                 <p> USER PROFILE! </p>
@@ -10,6 +10,6 @@ var UserProfiles = React.createClass({
             </div>
         )
     }
-});
+})
 
-module.exports = UserProfiles;
+module.exports = UserProfile;
