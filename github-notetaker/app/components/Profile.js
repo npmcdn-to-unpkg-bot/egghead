@@ -31,7 +31,7 @@ var Profile = React.createClass({
                 <div className="col-md-4">
                     <UserProfile username={this.props.params.username} bio={this.state.bio} />
                 </div>
-                <div className="col-md-4">https://github-notetaker-jwm.firebaseio.com/
+                <div className="col-md-4">
                     <Repos username={this.props.params.username} repos={this.state.repos} />
                 </div>
                 <div className="col-md-4">
