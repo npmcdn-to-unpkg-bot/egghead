@@ -8,7 +8,7 @@ class SearchGithub extends React.Component {
     handleSubmit() {
         const username = this.usernameRef.value;
         this.usernameRef.value = '';
-        this.props.pushState(null, "/profile/" + username);
+        this.props.history.pushState(null, "/profile/" + username);
     }
     render() {
         return (

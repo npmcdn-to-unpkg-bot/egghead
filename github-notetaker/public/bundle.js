@@ -24571,7 +24571,7 @@
 	        value: function handleSubmit() {
 	            var username = this.usernameRef.value;
 	            this.usernameRef.value = '';
-	            this.props.pushState(null, "/profile/" + username);
+	            this.props.history.pushState(null, "/profile/" + username);
 	        }
 	    }, {
 	        key: 'render',
