@@ -23,6 +23,6 @@ var Repos = React.createClass({
             </div>
         )
     }
-})
+});
 
 module.exports = Repos;

@@ -21,6 +21,6 @@ var UserProfile = React.createClass({
             </div>
         )
     }
-})
+});
 
 module.exports = UserProfile;
