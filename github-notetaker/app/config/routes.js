@@ -9,4 +9,4 @@ export default (
         <Route path="profile/:username" component={Profile} />
         <IndexRoute component={Home} />
     </Route>
-);
+)

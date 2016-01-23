@@ -20,4 +20,5 @@ Notes.propTypes = {
     addNote: React.PropTypes.func.isRequired
 }
 
-export default Notes;
+export default Notes
+

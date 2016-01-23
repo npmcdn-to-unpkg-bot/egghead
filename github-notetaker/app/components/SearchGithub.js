@@ -26,8 +26,9 @@ class SearchGithub extends React.Component {
     }
 }
 
-SearchGithub.PropTypes = {
+SearchGithub.propTypes = {
     history : React.PropTypes.object.isRequired
-}
+};
 
-export default SearchGithub;
+export default SearchGithub
+
