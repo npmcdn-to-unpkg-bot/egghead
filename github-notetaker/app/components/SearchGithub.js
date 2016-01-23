@@ -31,4 +31,3 @@ SearchGithub.propTypes = {
 };
 
 export default SearchGithub
-
