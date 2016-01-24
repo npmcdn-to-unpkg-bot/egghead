@@ -55,7 +55,7 @@
 
 	var App = __webpack_require__(2);
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(202);
+	var ReactDOM = __webpack_require__(203);
 
 	ReactDOM.render(React.createElement(App, null), document.getElementById('main'));
 
@@ -68,9 +68,9 @@
 	var React = __webpack_require__(3);
 	var Catalog = __webpack_require__(160);
 	var Cart = __webpack_require__(170);
-	var Router = __webpack_require__(174);
-	var CatalogDetail = __webpack_require__(198);
-	var Template = __webpack_require__(199);
+	var Router = __webpack_require__(175);
+	var CatalogDetail = __webpack_require__(199);
+	var Template = __webpack_require__(200);
 	var Locations = Router.Locations;
 	var Location = Router.Location;
 
@@ -20581,6 +20581,7 @@
 	var RemoveFromCart = __webpack_require__(171);
 	var Increase = __webpack_require__(172);
 	var Decrease = __webpack_require__(173);
+	var StoreWatchMixin = __webpack_require__(174);
 
 	function cartItems() {
 	    return { items: AppStore.getCart() };
@@ -20589,15 +20590,7 @@
 	var Cart = React.createClass({
 	    displayName: 'Cart',
 
-	    getInitialState: function getInitialState() {
-	        return cartItems();
-	    },
-	    componentWillMount: function componentWillMount() {
-	        AppStore.addChangeListener(this._onChange);
-	    },
-	    _onChange: function _onChange() {
-	        this.setState(cartItems());
-	    },
+	    mixins: [StoreWatchMixin(cartItems)],
 	    render: function render() {
 	        var total = 0;
 	        var items = this.state.items.map(function (item, i) {
@@ -20774,22 +20767,50 @@
 /* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var AppStore = __webpack_require__(161);
+
+	var StoreWatchMixin = function StoreWatchMixin(cb) {
+	    return {
+	        getInitialState: function getInitialState() {
+	            return cb();
+	        },
+	        componentWillMount: function componentWillMount() {
+	            AppStore.addChangeListener(this._onChange);
+	        },
+	        componentWillUnmount: function componentWillUnmount() {
+	            AppStore.removeChangeListener(this._onChange);
+	        },
+	        _onChange: function _onChange() {
+	            this.setState(cb());
+	        }
+	    };
+	};
+
+	module.exports = StoreWatchMixin;
+
+/***/ },
+/* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
 	"use strict";
 
-	var Router                    = __webpack_require__(175);
-	var Route                     = __webpack_require__(193);
-	var Link                      = __webpack_require__(194);
+	var Router                    = __webpack_require__(176);
+	var Route                     = __webpack_require__(194);
+	var Link                      = __webpack_require__(195);
 
-	var RouterMixin               = __webpack_require__(176);
-	var RouteRenderingMixin       = __webpack_require__(192);
+	var RouterMixin               = __webpack_require__(177);
+	var RouteRenderingMixin       = __webpack_require__(193);
 
-	var NavigatableMixin          = __webpack_require__(195);
+	var NavigatableMixin          = __webpack_require__(196);
 
-	var environment               = __webpack_require__(187);
+	var environment               = __webpack_require__(188);
 
-	var CaptureClicks             = __webpack_require__(196);
+	var CaptureClicks             = __webpack_require__(197);
 
-	var URLPattern                = __webpack_require__(180);
+	var URLPattern                = __webpack_require__(181);
 
 	var exportsObject = {
 	  Locations: Router.Locations,
@@ -20814,15 +20835,15 @@
 
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React                     = __webpack_require__(3);
-	var RouterMixin               = __webpack_require__(176);
-	var RouteRenderingMixin       = __webpack_require__(192);
-	var assign                    = Object.assign || __webpack_require__(178);
+	var RouterMixin               = __webpack_require__(177);
+	var RouteRenderingMixin       = __webpack_require__(193);
+	var assign                    = Object.assign || __webpack_require__(179);
 
 	/**
 	 * Create a new router class
@@ -20871,16 +20892,16 @@
 
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React         = __webpack_require__(3);
-	var invariant     = __webpack_require__(177);
-	var assign        = Object.assign || __webpack_require__(178);
-	var matchRoutes   = __webpack_require__(179);
-	var Environment   = __webpack_require__(187);
+	var invariant     = __webpack_require__(178);
+	var assign        = Object.assign || __webpack_require__(179);
+	var matchRoutes   = __webpack_require__(180);
+	var Environment   = __webpack_require__(188);
 
 	var RouterMixin = {
 	  mixins: [Environment.Mixin],
@@ -21104,7 +21125,7 @@
 
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21161,7 +21182,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports) {
 
 	/* eslint-disable no-unused-vars */
@@ -21206,17 +21227,17 @@
 
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var URLPattern = __webpack_require__(180);
-	var invariant = __webpack_require__(177);
-	var warning = __webpack_require__(182);
+	var URLPattern = __webpack_require__(181);
+	var invariant = __webpack_require__(178);
+	var warning = __webpack_require__(183);
 	var React = __webpack_require__(3);
-	var assign = Object.assign || __webpack_require__(178);
-	var qs = __webpack_require__(183);
+	var assign = Object.assign || __webpack_require__(179);
+	var qs = __webpack_require__(184);
 
 	var patternCache = {};
 
@@ -21354,14 +21375,14 @@
 
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Generated by CoffeeScript 1.10.0
 	var slice = [].slice;
 
 	(function(root, factory) {
-	  if (('function' === "function") && (__webpack_require__(181) != null)) {
+	  if (('function' === "function") && (__webpack_require__(182) != null)) {
 	    return !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	  } else if (typeof exports !== "undefined" && exports !== null) {
 	    return module.exports = factory();
@@ -21796,7 +21817,7 @@
 
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -21804,7 +21825,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21858,13 +21879,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Stringify = __webpack_require__(184);
-	var Parse = __webpack_require__(186);
+	var Stringify = __webpack_require__(185);
+	var Parse = __webpack_require__(187);
 
 
 	// Declare internals
@@ -21879,12 +21900,12 @@
 
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Utils = __webpack_require__(185);
+	var Utils = __webpack_require__(186);
 
 
 	// Declare internals
@@ -22039,7 +22060,7 @@
 
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports) {
 
 	// Load modules
@@ -22235,12 +22256,12 @@
 
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Utils = __webpack_require__(185);
+	var Utils = __webpack_require__(186);
 
 
 	// Declare internals
@@ -22428,7 +22449,7 @@
 
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22439,8 +22460,8 @@
 	 */
 
 	var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-	var DummyEnvironment      = __webpack_require__(188);
-	var Environment           = __webpack_require__(189);
+	var DummyEnvironment      = __webpack_require__(189);
+	var Environment           = __webpack_require__(190);
 
 	/**
 	 * Mixin for routes to keep attached to an environment.
@@ -22468,8 +22489,8 @@
 
 	if (canUseDOM) {
 
-	  PathnameEnvironment = __webpack_require__(190);
-	  HashEnvironment     = __webpack_require__(191);
+	  PathnameEnvironment = __webpack_require__(191);
+	  HashEnvironment     = __webpack_require__(192);
 
 	  pathnameEnvironment = new PathnameEnvironment();
 	  hashEnvironment     = new HashEnvironment();
@@ -22502,12 +22523,12 @@
 
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Environment   = __webpack_require__(189);
+	var Environment   = __webpack_require__(190);
 	var emptyFunction = function() {};
 
 	/**
@@ -22542,7 +22563,7 @@
 
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22645,12 +22666,12 @@
 
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Environment = __webpack_require__(189);
+	var Environment = __webpack_require__(190);
 
 	/**
 	 * Routing environment which routes by `location.pathname`.
@@ -22710,12 +22731,12 @@
 
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Environment = __webpack_require__(189);
+	var Environment = __webpack_require__(190);
 
 	/**
 	 * Routing environment which routes by `location.hash`.
@@ -22769,13 +22790,13 @@
 
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React = __webpack_require__(3);
-	var assign = Object.assign || __webpack_require__(178);
+	var assign = Object.assign || __webpack_require__(179);
 
 
 	/**
@@ -22817,7 +22838,7 @@
 
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22876,15 +22897,15 @@
 
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React             = __webpack_require__(3);
-	var NavigatableMixin  = __webpack_require__(195);
-	var Environment       = __webpack_require__(187);
-	var assign            = Object.assign || __webpack_require__(178);
+	var NavigatableMixin  = __webpack_require__(196);
+	var Environment       = __webpack_require__(188);
+	var assign            = Object.assign || __webpack_require__(179);
 
 	/**
 	 * Link.
@@ -22967,13 +22988,13 @@
 
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React       = __webpack_require__(3);
-	var Environment = __webpack_require__(187);
+	var Environment = __webpack_require__(188);
 
 
 	/**
@@ -23012,15 +23033,15 @@
 
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React       = __webpack_require__(3);
-	var urllite     = __webpack_require__(197);
-	var Environment = __webpack_require__(187);
-	var assign      = Object.assign || __webpack_require__(178);
+	var urllite     = __webpack_require__(198);
+	var Environment = __webpack_require__(188);
+	var assign      = Object.assign || __webpack_require__(179);
 
 	/**
 	 * A container component which captures <a> clicks and, if there's a matching
@@ -23139,7 +23160,7 @@
 
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	(function() {
@@ -23210,7 +23231,7 @@
 
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23228,13 +23249,13 @@
 	module.exports = CatalogItem;
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var Header = __webpack_require__(200);
+	var Header = __webpack_require__(201);
 
 	var Template = React.createClass({
 	    displayName: 'Template',
@@ -23252,13 +23273,13 @@
 	module.exports = Template;
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var CartSummary = __webpack_require__(201);
+	var CartSummary = __webpack_require__(202);
 
 	var Header = React.createClass({
 	    displayName: 'Header',
@@ -23289,13 +23310,13 @@
 	module.exports = Header;
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var Link = __webpack_require__(174).Link;
+	var Link = __webpack_require__(175).Link;
 
 	var CartSummary = React.createClass({
 	    displayName: 'CartSummary',
@@ -23316,7 +23337,7 @@
 	module.exports = CartSummary;
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
