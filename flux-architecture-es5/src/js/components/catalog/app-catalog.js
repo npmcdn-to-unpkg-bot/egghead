@@ -15,7 +15,7 @@ var Catalog = React.createClass({
             return (
                 <tr key={item.id}>
                     <td>{item.title}</td>
-                    <td>{item.cost}</td>
+                    <td>${item.cost}</td>
                     <td><AddToCart item={item} /></td>
                 </tr>
             )

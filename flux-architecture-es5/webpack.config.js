@@ -1,12 +1,12 @@
-module.exports = {
-    entry: './main.js',
-    output: {
-        paht: './',
-        filename: 'index.js'
+var path = require('path');
+var webpack = require('webpack');
+var config = {
+    entry: {
+        src: ['./src/js/main.js']
     },
-    devServer: {
-        inline: true,
-        port: 3333
+    output: {
+        path: path.resolve(__dirname, 'build'),
+        filename: 'bundle.js'
     },
     module: {
         loaders: [
@@ -20,4 +20,6 @@ module.exports = {
             }
         ]
     }
-}
+};
+
+module.exports = config;
