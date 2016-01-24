@@ -14,7 +14,7 @@ for(var i=1; i<9; i++){
         'summary': 'This is an awesome widget!',
         'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, commodi.',
         'cost': i,
-        'img': '/assets/product.png'
+        'img': 'http://image.ticketmonster.co.kr/deals/2015/10/16/175869381/175869381_catlist_3col_v2_1b477_1444981603production.jpg'
     });
 }
 

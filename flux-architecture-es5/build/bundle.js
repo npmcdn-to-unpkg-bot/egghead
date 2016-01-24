@@ -55,7 +55,7 @@
 
 	var App = __webpack_require__(2);
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(203);
+	var ReactDOM = __webpack_require__(204);
 
 	ReactDOM.render(React.createElement(App, null), document.getElementById('main'));
 
@@ -67,10 +67,10 @@
 
 	var React = __webpack_require__(3);
 	var Catalog = __webpack_require__(160);
-	var Cart = __webpack_require__(170);
-	var Router = __webpack_require__(175);
-	var CatalogDetail = __webpack_require__(199);
-	var Template = __webpack_require__(200);
+	var Cart = __webpack_require__(196);
+	var Router = __webpack_require__(170);
+	var CatalogDetail = __webpack_require__(200);
+	var Template = __webpack_require__(201);
 	var Locations = Router.Locations;
 	var Location = Router.Location;
 
@@ -19688,7 +19688,8 @@
 
 	var React = __webpack_require__(3);
 	var AppStore = __webpack_require__(161);
-	var AddToCart = __webpack_require__(168);
+	var StoreWatchMixin = __webpack_require__(168);
+	var CatalogItem = __webpack_require__(169);
 
 	function getCatalog() {
 	    return { items: AppStore.getCatalog() };
@@ -19697,40 +19698,15 @@
 	var Catalog = React.createClass({
 	    displayName: 'Catalog',
 
-	    getInitialState: function getInitialState() {
-	        return getCatalog();
-	    },
+	    mixins: [StoreWatchMixin(getCatalog)],
 	    render: function render() {
 	        var items = this.state.items.map(function (item) {
-	            return React.createElement(
-	                'tr',
-	                { key: item.id },
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    item.title
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    '$',
-	                    item.cost
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    React.createElement(AddToCart, { item: item })
-	                )
-	            );
+	            return React.createElement(CatalogItem, { key: item.id, item: item });
 	        });
 	        return React.createElement(
-	            'table',
-	            { className: 'table table-hover' },
-	            React.createElement(
-	                'tbody',
-	                null,
-	                items
-	            )
+	            'div',
+	            { className: 'row' },
+	            items
 	        );
 	    }
 	});
@@ -19759,7 +19735,7 @@
 	        'summary': 'This is an awesome widget!',
 	        'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus, commodi.',
 	        'cost': i,
-	        'img': '/assets/product.png'
+	        'img': 'http://image.ticketmonster.co.kr/deals/2015/10/16/175869381/175869381_catlist_3col_v2_1b477_1444981603production.jpg'
 	    });
 	}
 
@@ -20513,269 +20489,12 @@
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var AppActions = __webpack_require__(169);
-
-	var AddToCart = React.createClass({
-	    displayName: 'AddToCart',
-
-	    handler: function handler() {
-	        AppActions.addItem(this.props.item);
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'button',
-	            { onClick: this.handler },
-	            'Add To Cart'
-	        );
-	    }
-	});
-
-	module.exports = AddToCart;
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var AppConstants = __webpack_require__(166);
-	var AppDispatcher = __webpack_require__(162);
-
-	var AppActions = {
-	    addItem: function addItem(item) {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.ADD_ITEM,
-	            item: item
-	        });
-	    },
-	    removeItem: function removeItem(index) {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.REMOVE_ITEM,
-	            index: index
-	        });
-	    },
-	    increaseItem: function increaseItem(index) {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.INCREASE_ITEM,
-	            index: index
-	        });
-	    },
-	    decreaseItem: function decreaseItem(index) {
-	        AppDispatcher.handleViewAction({
-	            actionType: AppConstants.DECREASE_ITEM,
-	            index: index
-	        });
-	    }
-	};
-
-	module.exports = AppActions;
-
-/***/ },
-/* 170 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
-	var AppStore = __webpack_require__(161);
-	var RemoveFromCart = __webpack_require__(171);
-	var Increase = __webpack_require__(172);
-	var Decrease = __webpack_require__(173);
-	var StoreWatchMixin = __webpack_require__(174);
-
-	function cartItems() {
-	    return { items: AppStore.getCart() };
-	}
-
-	var Cart = React.createClass({
-	    displayName: 'Cart',
-
-	    mixins: [StoreWatchMixin(cartItems)],
-	    render: function render() {
-	        var total = 0;
-	        var items = this.state.items.map(function (item, i) {
-	            var subtotal = item.cost + item.qty;
-	            total += subtotal;
-	            return React.createElement(
-	                'tr',
-	                { key: i },
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    React.createElement(RemoveFromCart, { index: i })
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    item.title
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    item.qty
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    React.createElement(Increase, { index: i }),
-	                    React.createElement(Decrease, { index: i })
-	                ),
-	                React.createElement(
-	                    'td',
-	                    null,
-	                    subtotal
-	                )
-	            );
-	        });
-	        return React.createElement(
-	            'table',
-	            { className: 'table table-hover' },
-	            React.createElement(
-	                'thead',
-	                null,
-	                React.createElement(
-	                    'tr',
-	                    null,
-	                    React.createElement('th', null),
-	                    React.createElement(
-	                        'th',
-	                        null,
-	                        'Item'
-	                    ),
-	                    React.createElement(
-	                        'th',
-	                        null,
-	                        'Qty'
-	                    ),
-	                    React.createElement('th', null),
-	                    React.createElement(
-	                        'th',
-	                        null,
-	                        'Subtotal'
-	                    )
-	                )
-	            ),
-	            React.createElement(
-	                'tbody',
-	                null,
-	                items
-	            ),
-	            React.createElement(
-	                'tfoot',
-	                null,
-	                React.createElement(
-	                    'tr',
-	                    null,
-	                    React.createElement(
-	                        'td',
-	                        { colSpan: '4', className: 'text-right' },
-	                        'Total'
-	                    ),
-	                    React.createElement(
-	                        'td',
-	                        null,
-	                        '$',
-	                        total
-	                    )
-	                )
-	            )
-	        );
-	    }
-	});
-
-	module.exports = Cart;
-
-/***/ },
-/* 171 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
-	var AppActions = __webpack_require__(169);
-
-	var RemoveFromCart = React.createClass({
-	    displayName: 'RemoveFromCart',
-
-	    handler: function handler() {
-	        AppActions.removeItem(this.props.index);
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'button',
-	            { onClick: this.handler },
-	            'X'
-	        );
-	    }
-	});
-
-	module.exports = RemoveFromCart;
-
-/***/ },
-/* 172 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
-	var AppActions = __webpack_require__(169);
-
-	var IncreaseItem = React.createClass({
-	    displayName: 'IncreaseItem',
-
-	    handler: function handler() {
-	        AppActions.increaseItem(this.props.index);
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'button',
-	            { onClick: this.handler },
-	            '+'
-	        );
-	    }
-	});
-
-	module.exports = IncreaseItem;
-
-/***/ },
-/* 173 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
-	var AppActions = __webpack_require__(169);
-
-	var DecreaseItem = React.createClass({
-	    displayName: 'DecreaseItem',
-
-	    handler: function handler() {
-	        AppActions.decreaseItem(this.props.index);
-	    },
-	    render: function render() {
-	        return React.createElement(
-	            'button',
-	            { onClick: this.handler },
-	            '-'
-	        );
-	    }
-	});
-
-	module.exports = DecreaseItem;
-
-/***/ },
-/* 174 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var React = __webpack_require__(3);
 	var AppStore = __webpack_require__(161);
 
 	var StoreWatchMixin = function StoreWatchMixin(cb) {
 	    return {
 	        getInitialState: function getInitialState() {
-	            return cb();
+	            return cb(this);
 	        },
 	        componentWillMount: function componentWillMount() {
 	            AppStore.addChangeListener(this._onChange);
@@ -20784,7 +20503,7 @@
 	            AppStore.removeChangeListener(this._onChange);
 	        },
 	        _onChange: function _onChange() {
-	            this.setState(cb());
+	            this.setState(cb(this));
 	        }
 	    };
 	};
@@ -20792,25 +20511,85 @@
 	module.exports = StoreWatchMixin;
 
 /***/ },
-/* 175 */
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var Link = __webpack_require__(170).Link;
+	var AddToCart = __webpack_require__(194);
+
+	var CatalogItem = React.createClass({
+	    displayName: 'CatalogItem',
+
+	    render: function render() {
+	        var itemStyle = {
+	            borderBottom: '1px solid #ccc',
+	            paddingBottom: 15
+	        };
+	        return React.createElement(
+	            'div',
+	            { className: 'col-sm-3', style: itemStyle },
+	            React.createElement(
+	                'h4',
+	                null,
+	                this.props.item.title
+	            ),
+	            React.createElement('img', { src: this.props.item.img, width: '100%', alt: '' }),
+	            React.createElement(
+	                'p',
+	                null,
+	                this.props.item.summary
+	            ),
+	            React.createElement(
+	                'p',
+	                null,
+	                '$',
+	                this.props.item.cost,
+	                ' ',
+	                React.createElement(
+	                    'span',
+	                    { className: 'text-success' },
+	                    this.props.item.inCart && '(' + this.props.item.qty + ' in cart)'
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'btn-group btn-group-xs' },
+	                React.createElement(
+	                    Link,
+	                    { href: '/item/' + this.props.item.id, className: 'btn btn-default' },
+	                    'Learn More'
+	                ),
+	                React.createElement(AddToCart, { item: this.props.item })
+	            )
+	        );
+	    }
+	});
+
+	module.exports = CatalogItem;
+
+/***/ },
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Router                    = __webpack_require__(176);
-	var Route                     = __webpack_require__(194);
-	var Link                      = __webpack_require__(195);
+	var Router                    = __webpack_require__(171);
+	var Route                     = __webpack_require__(189);
+	var Link                      = __webpack_require__(190);
 
-	var RouterMixin               = __webpack_require__(177);
-	var RouteRenderingMixin       = __webpack_require__(193);
+	var RouterMixin               = __webpack_require__(172);
+	var RouteRenderingMixin       = __webpack_require__(188);
 
-	var NavigatableMixin          = __webpack_require__(196);
+	var NavigatableMixin          = __webpack_require__(191);
 
-	var environment               = __webpack_require__(188);
+	var environment               = __webpack_require__(183);
 
-	var CaptureClicks             = __webpack_require__(197);
+	var CaptureClicks             = __webpack_require__(192);
 
-	var URLPattern                = __webpack_require__(181);
+	var URLPattern                = __webpack_require__(176);
 
 	var exportsObject = {
 	  Locations: Router.Locations,
@@ -20835,15 +20614,15 @@
 
 
 /***/ },
-/* 176 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React                     = __webpack_require__(3);
-	var RouterMixin               = __webpack_require__(177);
-	var RouteRenderingMixin       = __webpack_require__(193);
-	var assign                    = Object.assign || __webpack_require__(179);
+	var RouterMixin               = __webpack_require__(172);
+	var RouteRenderingMixin       = __webpack_require__(188);
+	var assign                    = Object.assign || __webpack_require__(174);
 
 	/**
 	 * Create a new router class
@@ -20892,16 +20671,16 @@
 
 
 /***/ },
-/* 177 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React         = __webpack_require__(3);
-	var invariant     = __webpack_require__(178);
-	var assign        = Object.assign || __webpack_require__(179);
-	var matchRoutes   = __webpack_require__(180);
-	var Environment   = __webpack_require__(188);
+	var invariant     = __webpack_require__(173);
+	var assign        = Object.assign || __webpack_require__(174);
+	var matchRoutes   = __webpack_require__(175);
+	var Environment   = __webpack_require__(183);
 
 	var RouterMixin = {
 	  mixins: [Environment.Mixin],
@@ -21125,7 +20904,7 @@
 
 
 /***/ },
-/* 178 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21182,7 +20961,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 179 */
+/* 174 */
 /***/ function(module, exports) {
 
 	/* eslint-disable no-unused-vars */
@@ -21227,17 +21006,17 @@
 
 
 /***/ },
-/* 180 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var URLPattern = __webpack_require__(181);
-	var invariant = __webpack_require__(178);
-	var warning = __webpack_require__(183);
+	var URLPattern = __webpack_require__(176);
+	var invariant = __webpack_require__(173);
+	var warning = __webpack_require__(178);
 	var React = __webpack_require__(3);
-	var assign = Object.assign || __webpack_require__(179);
-	var qs = __webpack_require__(184);
+	var assign = Object.assign || __webpack_require__(174);
+	var qs = __webpack_require__(179);
 
 	var patternCache = {};
 
@@ -21375,14 +21154,14 @@
 
 
 /***/ },
-/* 181 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Generated by CoffeeScript 1.10.0
 	var slice = [].slice;
 
 	(function(root, factory) {
-	  if (('function' === "function") && (__webpack_require__(182) != null)) {
+	  if (('function' === "function") && (__webpack_require__(177) != null)) {
 	    return !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 	  } else if (typeof exports !== "undefined" && exports !== null) {
 	    return module.exports = factory();
@@ -21817,7 +21596,7 @@
 
 
 /***/ },
-/* 182 */
+/* 177 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {module.exports = __webpack_amd_options__;
@@ -21825,7 +21604,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ },
-/* 183 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -21879,13 +21658,13 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 184 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Stringify = __webpack_require__(185);
-	var Parse = __webpack_require__(187);
+	var Stringify = __webpack_require__(180);
+	var Parse = __webpack_require__(182);
 
 
 	// Declare internals
@@ -21900,12 +21679,12 @@
 
 
 /***/ },
-/* 185 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Utils = __webpack_require__(186);
+	var Utils = __webpack_require__(181);
 
 
 	// Declare internals
@@ -22060,7 +21839,7 @@
 
 
 /***/ },
-/* 186 */
+/* 181 */
 /***/ function(module, exports) {
 
 	// Load modules
@@ -22256,12 +22035,12 @@
 
 
 /***/ },
-/* 187 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Load modules
 
-	var Utils = __webpack_require__(186);
+	var Utils = __webpack_require__(181);
 
 
 	// Declare internals
@@ -22449,7 +22228,7 @@
 
 
 /***/ },
-/* 188 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22460,8 +22239,8 @@
 	 */
 
 	var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.document.createElement);
-	var DummyEnvironment      = __webpack_require__(189);
-	var Environment           = __webpack_require__(190);
+	var DummyEnvironment      = __webpack_require__(184);
+	var Environment           = __webpack_require__(185);
 
 	/**
 	 * Mixin for routes to keep attached to an environment.
@@ -22489,8 +22268,8 @@
 
 	if (canUseDOM) {
 
-	  PathnameEnvironment = __webpack_require__(191);
-	  HashEnvironment     = __webpack_require__(192);
+	  PathnameEnvironment = __webpack_require__(186);
+	  HashEnvironment     = __webpack_require__(187);
 
 	  pathnameEnvironment = new PathnameEnvironment();
 	  hashEnvironment     = new HashEnvironment();
@@ -22523,12 +22302,12 @@
 
 
 /***/ },
-/* 189 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Environment   = __webpack_require__(190);
+	var Environment   = __webpack_require__(185);
 	var emptyFunction = function() {};
 
 	/**
@@ -22563,7 +22342,7 @@
 
 
 /***/ },
-/* 190 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22666,12 +22445,12 @@
 
 
 /***/ },
-/* 191 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Environment = __webpack_require__(190);
+	var Environment = __webpack_require__(185);
 
 	/**
 	 * Routing environment which routes by `location.pathname`.
@@ -22731,12 +22510,12 @@
 
 
 /***/ },
-/* 192 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Environment = __webpack_require__(190);
+	var Environment = __webpack_require__(185);
 
 	/**
 	 * Routing environment which routes by `location.hash`.
@@ -22790,13 +22569,13 @@
 
 
 /***/ },
-/* 193 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React = __webpack_require__(3);
-	var assign = Object.assign || __webpack_require__(179);
+	var assign = Object.assign || __webpack_require__(174);
 
 
 	/**
@@ -22838,7 +22617,7 @@
 
 
 /***/ },
-/* 194 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -22897,15 +22676,15 @@
 
 
 /***/ },
-/* 195 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React             = __webpack_require__(3);
-	var NavigatableMixin  = __webpack_require__(196);
-	var Environment       = __webpack_require__(188);
-	var assign            = Object.assign || __webpack_require__(179);
+	var NavigatableMixin  = __webpack_require__(191);
+	var Environment       = __webpack_require__(183);
+	var assign            = Object.assign || __webpack_require__(174);
 
 	/**
 	 * Link.
@@ -22988,13 +22767,13 @@
 
 
 /***/ },
-/* 196 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React       = __webpack_require__(3);
-	var Environment = __webpack_require__(188);
+	var Environment = __webpack_require__(183);
 
 
 	/**
@@ -23033,15 +22812,15 @@
 
 
 /***/ },
-/* 197 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
 	var React       = __webpack_require__(3);
-	var urllite     = __webpack_require__(198);
-	var Environment = __webpack_require__(188);
-	var assign      = Object.assign || __webpack_require__(179);
+	var urllite     = __webpack_require__(193);
+	var Environment = __webpack_require__(183);
+	var assign      = Object.assign || __webpack_require__(174);
 
 	/**
 	 * A container component which captures <a> clicks and, if there's a matching
@@ -23160,7 +22939,7 @@
 
 
 /***/ },
-/* 198 */
+/* 193 */
 /***/ function(module, exports) {
 
 	(function() {
@@ -23231,22 +23010,271 @@
 
 
 /***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var AppActions = __webpack_require__(195);
+
+	var AddToCart = React.createClass({
+	    displayName: 'AddToCart',
+
+	    handler: function handler() {
+	        AppActions.addItem(this.props.item);
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            'button',
+	            { className: 'btn btn-default', onClick: this.handler },
+	            'Add To Cart'
+	        );
+	    }
+	});
+
+	module.exports = AddToCart;
+
+/***/ },
+/* 195 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var AppConstants = __webpack_require__(166);
+	var AppDispatcher = __webpack_require__(162);
+
+	var AppActions = {
+	    addItem: function addItem(item) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.ADD_ITEM,
+	            item: item
+	        });
+	    },
+	    removeItem: function removeItem(index) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.REMOVE_ITEM,
+	            index: index
+	        });
+	    },
+	    increaseItem: function increaseItem(index) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.INCREASE_ITEM,
+	            index: index
+	        });
+	    },
+	    decreaseItem: function decreaseItem(index) {
+	        AppDispatcher.handleViewAction({
+	            actionType: AppConstants.DECREASE_ITEM,
+	            index: index
+	        });
+	    }
+	};
+
+	module.exports = AppActions;
+
+/***/ },
+/* 196 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var AppStore = __webpack_require__(161);
+	var RemoveFromCart = __webpack_require__(197);
+	var Increase = __webpack_require__(198);
+	var Decrease = __webpack_require__(199);
+	var StoreWatchMixin = __webpack_require__(168);
+	var Link = __webpack_require__(170).Link;
+
+	function cartItems() {
+	    return { items: AppStore.getCart() };
+	}
+
+	var Cart = React.createClass({
+	    displayName: 'Cart',
+
+	    mixins: [StoreWatchMixin(cartItems)],
+	    render: function render() {
+	        var total = 0;
+	        var items = this.state.items.map(function (item, i) {
+	            var subtotal = item.cost + item.qty;
+	            total += subtotal;
+	            return React.createElement(
+	                'tr',
+	                { key: i },
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    React.createElement(RemoveFromCart, { index: i })
+	                ),
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    item.title
+	                ),
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    item.qty
+	                ),
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    React.createElement(Increase, { index: i }),
+	                    React.createElement(Decrease, { index: i })
+	                ),
+	                React.createElement(
+	                    'td',
+	                    null,
+	                    subtotal
+	                )
+	            );
+	        });
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'table',
+	                { className: 'table table-hover' },
+	                React.createElement(
+	                    'thead',
+	                    null,
+	                    React.createElement(
+	                        'tr',
+	                        null,
+	                        React.createElement('th', null),
+	                        React.createElement(
+	                            'th',
+	                            null,
+	                            'Item'
+	                        ),
+	                        React.createElement(
+	                            'th',
+	                            null,
+	                            'Qty'
+	                        ),
+	                        React.createElement('th', null),
+	                        React.createElement(
+	                            'th',
+	                            null,
+	                            'Subtotal'
+	                        )
+	                    )
+	                ),
+	                React.createElement(
+	                    'tbody',
+	                    null,
+	                    items
+	                ),
+	                React.createElement(
+	                    'tfoot',
+	                    null,
+	                    React.createElement(
+	                        'tr',
+	                        null,
+	                        React.createElement(
+	                            'td',
+	                            { colSpan: '4', className: 'text-right' },
+	                            'Total'
+	                        ),
+	                        React.createElement(
+	                            'td',
+	                            null,
+	                            '$',
+	                            total
+	                        )
+	                    )
+	                )
+	            ),
+	            React.createElement(
+	                Link,
+	                { href: '/' },
+	                'Continue Shopping'
+	            )
+	        );
+	    }
+	});
+
+	module.exports = Cart;
+
+/***/ },
+/* 197 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var AppActions = __webpack_require__(195);
+
+	var RemoveFromCart = React.createClass({
+	    displayName: 'RemoveFromCart',
+
+	    handler: function handler() {
+	        AppActions.removeItem(this.props.index);
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            'button',
+	            { onClick: this.handler },
+	            'X'
+	        );
+	    }
+	});
+
+	module.exports = RemoveFromCart;
+
+/***/ },
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var AppActions = __webpack_require__(195);
+
+	var IncreaseItem = React.createClass({
+	    displayName: 'IncreaseItem',
+
+	    handler: function handler() {
+	        AppActions.increaseItem(this.props.index);
+	    },
+	    render: function render() {
+	        return React.createElement(
+	            'button',
+	            { onClick: this.handler },
+	            '+'
+	        );
+	    }
+	});
+
+	module.exports = IncreaseItem;
+
+/***/ },
 /* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
+	var AppActions = __webpack_require__(195);
 
-	var CatalogItem = React.createClass({
-	    displayName: 'CatalogItem',
+	var DecreaseItem = React.createClass({
+	    displayName: 'DecreaseItem',
 
+	    handler: function handler() {
+	        AppActions.decreaseItem(this.props.index);
+	    },
 	    render: function render() {
-	        return null;
+	        return React.createElement(
+	            'button',
+	            { onClick: this.handler },
+	            '-'
+	        );
 	    }
 	});
 
-	module.exports = CatalogItem;
+	module.exports = DecreaseItem;
 
 /***/ },
 /* 200 */
@@ -23255,7 +23283,76 @@
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var Header = __webpack_require__(201);
+	var AppStore = __webpack_require__(161);
+	var AddToCart = __webpack_require__(194);
+	var StoreWatchMixin = __webpack_require__(168);
+	var Link = __webpack_require__(170).Link;
+
+	function getCatalogItem(component) {
+	    var thisItem;
+	    AppStore.getCatalog().forEach(function (item) {
+	        if (item.id.toString() === component.props.item) {
+	            thisItem = item;
+	        }
+	    });
+	    return { item: thisItem };
+	}
+
+	var CatalogDeatil = React.createClass({
+	    displayName: 'CatalogDeatil',
+
+	    mixins: [StoreWatchMixin(getCatalogItem)],
+	    render: function render() {
+	        return React.createElement(
+	            'div',
+	            null,
+	            React.createElement(
+	                'h2',
+	                null,
+	                this.state.item.title
+	            ),
+	            React.createElement('img', { src: this.state.item.img, width: '50%', alt: '' }),
+	            React.createElement(
+	                'p',
+	                null,
+	                this.state.item.description
+	            ),
+	            React.createElement(
+	                'p',
+	                null,
+	                '$',
+	                this.state.item.cost,
+	                ' ',
+	                React.createElement(
+	                    'span',
+	                    { className: 'text-success' },
+	                    this.state.item.inCart && '(' + this.state.item.qty + ' in cart)'
+	                )
+	            ),
+	            React.createElement(
+	                'div',
+	                { className: 'btn-group btn-group-sm' },
+	                React.createElement(AddToCart, { item: this.state.item }),
+	                React.createElement(
+	                    Link,
+	                    { href: '/', className: 'btn btn-default' },
+	                    'Continue Shopping'
+	                )
+	            )
+	        );
+	    }
+	});
+
+	module.exports = CatalogDeatil;
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var React = __webpack_require__(3);
+	var Header = __webpack_require__(202);
 
 	var Template = React.createClass({
 	    displayName: 'Template',
@@ -23273,13 +23370,13 @@
 	module.exports = Template;
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var CartSummary = __webpack_require__(202);
+	var CartSummary = __webpack_require__(203);
 
 	var Header = React.createClass({
 	    displayName: 'Header',
@@ -23310,17 +23407,24 @@
 	module.exports = Header;
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	var React = __webpack_require__(3);
-	var Link = __webpack_require__(175).Link;
+	var Link = __webpack_require__(170).Link;
+	var AppStore = __webpack_require__(161);
+	var StoreWatchMixin = __webpack_require__(168);
+
+	function cartTotals() {
+	    return AppStore.getCartTotals();
+	}
 
 	var CartSummary = React.createClass({
 	    displayName: 'CartSummary',
 
+	    mixins: [StoreWatchMixin(cartTotals)],
 	    render: function render() {
 	        return React.createElement(
 	            'div',
@@ -23328,7 +23432,10 @@
 	            React.createElement(
 	                Link,
 	                { href: '/cart', className: 'btn btn-success' },
-	                'Cart Items: QTY / $COST'
+	                'Cart Items: ',
+	                this.state.qty,
+	                ' / $',
+	                this.state.total
 	            )
 	        );
 	    }
@@ -23337,7 +23444,7 @@
 	module.exports = CartSummary;
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
