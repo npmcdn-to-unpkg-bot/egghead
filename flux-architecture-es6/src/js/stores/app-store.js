@@ -4,7 +4,7 @@ import {EventEmitter} from 'events';
 
 const CHANGE_EVENT = 'change';
 
-var _catalog = [];
+let _catalog = [];
 
 for (let i = 1; i < 9; i++) {
     _catalog.push({
@@ -16,7 +16,7 @@ for (let i = 1; i < 9; i++) {
     });
 }
 
-var _cartItems = [];
+let _cartItems = [];
 
 const _removeItem = (item) => {
     _cartItems.splice(_cartItems.findIndex(i => i === item), 1);
