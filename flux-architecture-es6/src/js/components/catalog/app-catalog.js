@@ -3,7 +3,7 @@ import AppStore from '../../stores/app-store';
 import CatalogItem from './app-catalog-item';
 import StoreWatchMixin from '../../mixins/StoreWatchMixin';
 
-const getCatalog = () => {
+function getCatalog() {
     return {items: AppStore.getCatalog()}
 }
 
