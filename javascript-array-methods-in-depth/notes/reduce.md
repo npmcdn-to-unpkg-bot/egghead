@@ -42,6 +42,30 @@ function callbackfn(previousValue, currentValue, currentIndex, array1)
 | 콜백 인수       | 정의           |
 | ------------- | ------------- |
 | previousValue | 콜백 함수에 대한 이전 호출로부터 얻은 값입니다. initialValue가 reduce 메서드에 제공된 경우 previousValue는 함수를 처음 호출할 때의 initialValue입니다. |
-| currentValue  | centered                  |
-| currentIndex  | centered                  |
+| currentValue  | 현재 배열 요소의 값입니다. |
+| currentIndex  | 현재 배열 요소의 숫자 인덱스입니다. |
 | array1        | 요소가 포함된 Array 개체입니다. |
+
+###콜백 함수에 대한 첫 번째 호출
+콜백 함수를 처음 호출할 때 인수로 제공되는 값은 reduce 메서드에 initialValue 인수가 포함되었는지 여부에 따라 달라집니다.
+
+initialValue가 reduce 메서드에 제공된 경우
+
+- previousValue 인수가 initialValue입니다.
+- currentValue 인수가 배열에 있는 첫 번째 요소의 값입니다.
+
+initialValue가 제공되지 않은 경우:
+
+- previousValue 인수가 배열에 있는 첫 번째 요소의 값입니다.
+- currentValue 인수가 배열에 있는 두 번째 요소의 값입니다.
+
+###Array 개체 수정
+배열 개체는 콜백 함수로 수정할 수 있습니다.
+다음 표에서는 reduce 메서드가 시작된 후 배열 개체를 수정한 결과를 보여 줍니다.
+
+| reduce 메서드가 시작된 후의 조건 | 콜백 함수에 전달된 요소 |
+| ------------- | ------------- |
+| 요소는 배열의 원래 길이를 벗어나서 추가됩니다. | 아니요. |
+| 요소는 배열의 누락된 요소를 채우도록 추가됩니다. | 예, 해당 인덱스가 콜백 함수에 아직 전달되지 않은 경우 그렇습니다. |
+| 요소가 변경되었습니다. | 예, 해당 요소가 콜백 함수에 아직 전달되지 않은 경우 그렇습니다. |
+| 요소가 배열에서 삭제됩니다. | 아니요, 해당 요소가 콜백 함수에 아직 전달되지 않은 경우 그렇습니다. |
